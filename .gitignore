@@ -1,7 +1,7 @@
 *.gem
 *.rbc
 /.config
-/coverage/
+/.idea//coverage/
 /InstalledFiles
 /pkg/
 /spec/reports/
