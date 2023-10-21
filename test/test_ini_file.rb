@@ -3,7 +3,7 @@
 require 'tempfile'
 require 'English'
 require 'minitest/autorun'
-require './ini_file'
+require_relative '../lib/ini_file'
 
 include Ini_File
 
