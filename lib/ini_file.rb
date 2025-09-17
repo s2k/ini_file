@@ -148,7 +148,7 @@ module IniFileGem
           @sections.section(last_section).add_pair(Regexp.last_match(1), Regexp.last_match(2), comment)
           comment = ''
         when /^\s*(?=[;\#])(.*?)\s*$/
-          comment += (comment.size.zero? ? '' : "\n") + Regexp.last_match(1)
+          comment += (comment.empty? ? '' : "\n") + Regexp.last_match(1)
         else
           raise InvalidIniFile, "Can't parse file '#{@file}' at line #{$INPUT_LINE_NUMBER}", caller
         end
