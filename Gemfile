@@ -1,6 +1,6 @@
 source 'https://rubygems.org/'
 
 
-gem 'minitest', '~> 5.23'
+gem 'minitest', '~> 5.25'
 gem 'rake', '~> 13.2'
 gem 'mutex_m'
