@@ -10,8 +10,6 @@ class IniFileTest < Minitest::Test
 end
 
 class TestIni < IniFileTest
-
-
   def setup
     @ini = IniFile.new('test_1.ini')
     @sections = ['', 'TheFirstSection', 'Another Section', 'AndThe 3rd', 'Has2CommentLines'].sort
@@ -37,6 +35,7 @@ class TestIni < IniFileTest
 
   def test_section
     sct1 = @ini.section('TheFirstSection')
+
     assert_equal('aValue', sct1.get_value('s1k1'))
     assert_equal('anotherValue', sct1['s1k2'])
     assert_equal('1234', @ini.section('')['before_any_section_or_comment'])
@@ -44,14 +43,15 @@ class TestIni < IniFileTest
   end
 
   def test_section_empty
-    assert(@ini.section('Another Section').empty?)
-    assert(@ini.section('AndThe 3rd').empty?)
-    assert(!@ini.section('TheFirstSection').empty?)
+    assert_empty(@ini.section('Another Section'))
+    assert_empty(@ini.section('AndThe 3rd'))
+    refute_empty(@ini.section('TheFirstSection'))
   end
 
   def test_get_sectioncomment
     assert_equal(';This is yet another comment', @ini.section('TheFirstSection').comment)
     cmt = "; Two comment lines\n# that both belong to section [Has2CommentLines]"
+
     assert_equal(cmt, @ini.section('Has2CommentLines').comment)
   end
 
@@ -68,6 +68,7 @@ class TestIni < IniFileTest
     fn.puts ini_to_s
     fn.close
     @ini2 = IniFile.new(fn.path)
+
     assert_equal(@ini, @ini2)
   end
 
@@ -96,10 +97,10 @@ class TestIni < IniFileTest
       s1k1 = aValue
       s1k2 = anotherValue
     ENDOFFILE
-    # expect.gsub!(/^ */, '')
     tmp_name = './ini-tmp.ini'
     @ini.save(tmp_name)
     f = File.readlines(tmp_name).join
+
     assert_equal(expect, f)
   end
 end
@@ -110,14 +111,9 @@ class TestIniFileValidation < IniFileTest
     @allkeys = %w[before_any_section_or_comment 1stKey s1k1 s1k2].sort
   end
 
-  def test_invalid_IniFile
+  def test_invalid_ini_file
     assert_raises(InvalidIniFile, "Should have risen InvalidIniFile, but didn't") do
       @ini = IniFile.new('test_2.ini')
     end
-  end
-
-  def test_valid_IniFile
-    @ini = IniFile.new('test_1.ini')
-    assert true
   end
 end
