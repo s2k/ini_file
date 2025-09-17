@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
+require 'English'
 require 'minitest/autorun'
 require 'tempfile'
-require 'English'
 require_relative '../lib/ini_file'
 
-include IniFileGem
+class IniFileTest < Minitest::Test
+  include IniFileGem
+end
 
-class TestIni < Minitest::Test
+class TestIni < IniFileTest
+
+
   def setup
     @ini = IniFile.new('test_1.ini')
     @sections = ['', 'TheFirstSection', 'Another Section', 'AndThe 3rd', 'Has2CommentLines'].sort
@@ -58,7 +62,7 @@ class TestIni < Minitest::Test
     assert_equal('# Note that this is a comment', @ini.section('').get_pair('1stKey').comment)
   end
 
-  def test_Ini_to_string
+  def test_ini_to_string
     ini_to_s = @ini.to_s
     fn = Tempfile.new('initemp')
     fn.puts ini_to_s
@@ -100,7 +104,7 @@ class TestIni < Minitest::Test
   end
 end
 
-class TestIni_FileValidation < Minitest::Test
+class TestIniFileValidation < IniFileTest
   def setup
     @sections = ['', 'TheFirstSection', 'Another Section', 'AndThe 3rd', 'Has2CommentLines'].sort
     @allkeys = %w[before_any_section_or_comment 1stKey s1k1 s1k2].sort

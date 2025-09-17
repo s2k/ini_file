@@ -155,8 +155,8 @@ module IniFileGem
       end
     end
 
-    def each_section(&block)
-      @sections.each(&block)
+    def each_section(&)
+      @sections.each(&)
     end
 
     def section(sect_name)
