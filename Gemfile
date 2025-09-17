@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org/'
 
-
 gem 'minitest', '~> 5.25'
-gem 'rake', '~> 13.2'
 gem 'mutex_m'
+gem 'rake', '~> 13.3'
