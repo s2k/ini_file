@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
+require 'minitest/autorun'
 require 'tempfile'
 require 'English'
-require 'minitest/autorun'
 require_relative '../lib/ini_file'
 
-include Ini_File
+include IniFileGem
 
 class TestIni < Minitest::Test
   def setup
@@ -107,7 +107,7 @@ class TestIni_FileValidation < Minitest::Test
   end
 
   def test_invalid_IniFile
-    assert_raises(Invalid_IniFile, "Should have risen Invalid_IniFile, but didn't") do
+    assert_raises(InvalidIniFile, "Should have risen InvalidIniFile, but didn't") do
       @ini = IniFile.new('test_2.ini')
     end
   end

@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
-module Ini_File
+# Wraps gem content in a matching namespace
+#
+module IniFileGem
   require 'English'
 
-  class Invalid_IniFile < RuntimeError
+  class InvalidIniFile < RuntimeError
   end
 
+  # Pair represents a single key values pair in an INI file.
+  #
   class Pair
     attr_reader :key, :value, :comment
 
@@ -23,6 +27,9 @@ module Ini_File
     end
   end
 
+  # INI files can be structured by using sections (parts that are marked with `[section_title]`)
+  # This class represents the sections (if any) in an INI file,
+  # including it's comments & key/value pairs
   class Section
     attr_reader :sect_name, :entries, :comment_
 
@@ -71,13 +78,14 @@ module Ini_File
       res = "\n"
       res += "#{@comment_}\n" if @comment_ != ''
       res += "[#{@sect_name}]\n" if @sect_name
-      @entries.each do |_k, v|
-        res += v.to_s
-      end
+      @entries.each_value { |v| res += v.to_s }
+
       res
     end
   end
 
+  # Sections are collections of, sections
+  #
   class Sections
     attr_reader :sections
 
@@ -99,8 +107,8 @@ module Ini_File
       sections.size
     end
 
-    def each(&block)
-      @sections.keys.sort.each(&block)
+    def each(&)
+      @sections.keys.sort.each(&)
     end
 
     def section(sect_name)
@@ -109,13 +117,16 @@ module Ini_File
 
     def to_s
       res = ''
-      each  do |sect|
+      each do |sect|
         res += section(sect).to_s
       end
       res
     end
   end
 
+  # This is the main class.
+  # It's initialises by passing a filename to `init`.
+  #
   class IniFile
     attr_reader :file, :sections
 
@@ -139,7 +150,7 @@ module Ini_File
         when /^\s*(?=[;\#])(.*?)\s*$/
           comment += (comment.size.zero? ? '' : "\n") + Regexp.last_match(1)
         else
-          raise Invalid_IniFile, "Can't parse file '#{@file}' at line #{$INPUT_LINE_NUMBER}", caller
+          raise InvalidIniFile, "Can't parse file '#{@file}' at line #{$INPUT_LINE_NUMBER}", caller
         end
       end
     end
