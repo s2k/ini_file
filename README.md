@@ -10,4 +10,6 @@ Therefore: `ini_file.rb`
 
 It' not (yet?) a Ruby gem, but may still be useful for folks.
 
+## Supported Ruby versions
 
+Anything from Ruby 3.1 should work, but _not_ Ruby 3.0 (as this version didn't support anonymous block forwarding; for details see, for example, https://www.writesoftwarewell.com/anonymous-block-forwarding-in-ruby/)
