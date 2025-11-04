@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org/'
 
-gem 'minitest', '~> 5.25'
+gem 'minitest', '~> 5.26'
 gem 'mutex_m'
 gem 'rake', '~> 13.3'
 gem 'rubocop-minitest'
