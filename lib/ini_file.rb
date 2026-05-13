@@ -14,8 +14,8 @@ module IniFileGem
     attr_reader :key, :value, :comment
 
     def initialize(key = nil, val = nil, comment = '')
-      @key = key
-      @value = val
+      @key     = key
+      @value   = val
       @comment = comment
     end
 
@@ -133,26 +133,38 @@ module IniFileGem
     def initialize(filename)
       @file = filename
       @sections = Sections.new
+      parse_file
+    end
+
+    def parse_file
       last_section = ''
-      comment = ''
+      comment      = ''
       File.foreach(@file) do |line|
-        case line
-        when /^\s*$/
-        # Start a new section
-        when /^\s*\[\s*([^\]]*)\s*\]/
-          @sections << Regexp.last_match(1)
-          last_section = Regexp.last_match(1)
-          @sections.section(Regexp.last_match(1)).comment = comment
-          comment = ''
-        when /^\s*(.*?)\s*=\s*(.*?)\s*$/
-          @sections.section(last_section).add_pair(Regexp.last_match(1), Regexp.last_match(2), comment)
-          comment = ''
-        when /^\s*(?=[;\#])(.*?)\s*$/
-          comment += (comment.empty? ? '' : "\n") + Regexp.last_match(1)
-        else
-          raise InvalidIniFile, "Can't parse file '#{@file}' at line #{$INPUT_LINE_NUMBER}", caller
-        end
+        comment, last_section = parse_single_line(line, comment, last_section)
       end
+    end
+
+    def parse_single_line(line, comment, last_section)
+      case line
+      when /^\s*$/
+        # skip empty lines
+      when /^\s*\[\s*([^\]]*)\s*\]/
+        # New section
+        @sections << Regexp.last_match(1)
+        last_section                                    = Regexp.last_match(1)
+        @sections.section(Regexp.last_match(1)).comment = comment
+        comment                                         = ''
+      when /^\s*(.*?)\s*=\s*(.*?)\s*$/
+        # Append new pair to current section
+        @sections.section(last_section).add_pair(Regexp.last_match(1), Regexp.last_match(2), comment)
+        comment = ''
+      when /^\s*(?=[;\#])(.*?)\s*$/
+        # Append to comment
+        comment += (comment.empty? ? '' : "\n") + Regexp.last_match(1)
+      else
+        raise InvalidIniFile, "Can't parse file '#{@file}' at line #{$INPUT_LINE_NUMBER}", caller
+      end
+      [comment, last_section]
     end
 
     def each_section(&)

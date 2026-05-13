@@ -11,9 +11,9 @@ end
 
 class TestIni < IniFileTest
   def setup
-    @ini = IniFile.new('test_1.ini')
+    @ini      = IniFile.new('test_1.ini')
     @sections = ['', 'TheFirstSection', 'Another Section', 'AndThe 3rd', 'Has2CommentLines'].sort
-    @allkeys = %w[before_any_section_or_comment 1stKey s1k1 s1k2].sort
+    @allkeys  = %w[before_any_section_or_comment 1stKey s1k1 s1k2].sort
   end
 
   def test_get_filename
@@ -64,7 +64,7 @@ class TestIni < IniFileTest
 
   def test_ini_to_string
     ini_to_s = @ini.to_s
-    fn = Tempfile.new('initemp')
+    fn       = Tempfile.new('initemp')
     fn.puts ini_to_s
     fn.close
     @ini2 = IniFile.new(fn.path)
@@ -98,17 +98,21 @@ class TestIni < IniFileTest
       s1k2 = anotherValue
     ENDOFFILE
     tmp_name = './ini-tmp.ini'
+
+    refute_path_exists tmp_name, "Temp file '#{tmp_name}' should not exist, but does."
     @ini.save(tmp_name)
     f = File.readlines(tmp_name).join
 
     assert_equal(expect, f)
+  ensure
+    File.delete tmp_name
   end
 end
 
 class TestIniFileValidation < IniFileTest
   def setup
     @sections = ['', 'TheFirstSection', 'Another Section', 'AndThe 3rd', 'Has2CommentLines'].sort
-    @allkeys = %w[before_any_section_or_comment 1stKey s1k1 s1k2].sort
+    @allkeys  = %w[before_any_section_or_comment 1stKey s1k1 s1k2].sort
   end
 
   def test_invalid_ini_file
