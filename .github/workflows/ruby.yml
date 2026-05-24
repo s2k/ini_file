@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        os: [ubuntu-latest, macos-latest]
         ruby-version: ['3.2.11', '3.3.10', '3.4.8', '4.0.5']
 
     steps:
